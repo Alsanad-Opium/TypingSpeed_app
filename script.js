@@ -12,29 +12,55 @@ let accuracy = document.getElementById('accuracy')
 
 let errors = document.getElementById('total-errors')
 
-const restart =  document.getElementById('restart-btn')
+const restart = document.getElementById('restart-btn')
 
+let timer = document.getElementById('timer')
 
+let mistakes = 0
 
 start_btn.addEventListener('click', randomQouteGenerator);
+start_btn.addEventListener('click', countdown)
 
 async function randomQouteGenerator() {
-    try {
-        let response = await fetch('https://qapi.vercel.app/api/random');
-        let data = await response.json();
 
-        randomQoute.textContent = data.quote;
-        
-        qouteArray = new Array(data.quote.split(""))
+    let response = await fetch('https://qapi.vercel.app/api/random');
+    let data = await response.json();
 
-        user_input.addEventListener('input', check_errors)
+    randomQoute.textContent = data.quote;
+
+    qouteArray = data.quote.split("")
     
-        function check_errors() {
-            let user_value = new Array (user_input.value.split())
+
+    
+    user_input.addEventListener('input', check_errors)
+}
+
+function countdown() {
+    clearInterval(countdown); // Clear any existing timer
+        let timeLeft = 60; // 60 seconds
+
+        countdown = setInterval(() => {
+            timeLeft--;
+            timer.textContent = 'Timer :' + ' ' + timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = 'Timer : ' + ' ' +'Time\'s up!';
+            }
+        }, 1000);
+}
+
+function check_errors() {
+    let user_value = user_input.value
+    let user_arr = user_value.split("")
+    mistakes = 0 
+    for (let index = 0; index < user_arr.length; index++) {
+        const user_word = user_arr[index]
+        const qoute_word = qouteArray[index]
+
+        if (user_word !== qoute_word) {
+            mistakes = mistakes + 1
         }
-    }
-     catch (error) {
-        console.error('Error fetching quote:', error);
     }
     
 }

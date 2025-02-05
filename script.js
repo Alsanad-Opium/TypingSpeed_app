@@ -1,69 +1,116 @@
-const randomQoute = document.getElementById('random-qoute')
+// Get references to DOM elements
+const timerElement = document.getElementById('timer');
+const randomQoute = document.getElementById('random-qoute');
+const user_input = document.getElementById('user-input');
+const start_btn = document.getElementById('start-btn');
+const wpmElement = document.getElementById('wpm');
+const accuracyElement = document.getElementById('accuracy');
+const errorsElement = document.getElementById('total-errors');
+const restart = document.getElementById('restart-btn');
 
-const user_input = document.getElementById('user-input')
+let quoteArray = [];        // To store the characters of the quote
+let userInputArray = [];    // To store the characters typed by the user
+let mistakes = 0;           // Mistake counter
+let timeLeft = 60;          // Timer duration in seconds
+let totalTime = 60;         // Total time for calculating WPM
+let intervalID;             // To store the interval ID
+let isTimerRunning = false; // Flag to check if the timer is running
 
-const start_btn = document.getElementById('start-btn')
+start_btn.addEventListener('click', startTest);
+restart.addEventListener('click', resetTest);
 
-let wpm = document.getElementById('wpm')
+// Function to start the test
+function startTest() {
+    resetTest();
+    randomQouteGenerator();
+    user_input.disabled = false;    // Enable the input field
+    user_input.focus();             // Set focus to the input field
+    if (!isTimerRunning) {
+        countdown();
+    }
+    isTimerRunning = true;
+}
 
-let accuracy = document.getElementById('accuracy')
+// Function to reset the test
+function resetTest() {
+    clearInterval(intervalID);
+    isTimerRunning = false;
+    timeLeft = totalTime;
+    mistakes = 0;
+    timerElement.textContent = 'Timer: ' + timeLeft;
+    wpmElement.textContent = 0;
+    accuracyElement.textContent = 100;
+    errorsElement.textContent = 0;
+    user_input.value = '';
+    user_input.disabled = true;
+    randomQoute.textContent = 'Click Start to begin the test.';
+}
 
-let errors = document.getElementById('total-errors')
-
-const restart = document.getElementById('restart-btn')
-
-let timer = document.getElementById('timer')
-
-let mistakes = 0
-
-let Interval_ID
-let timeLeft = 60; // 60 seconds
-
-start_btn.addEventListener('click', randomQouteGenerator);
-start_btn.addEventListener('click', countdown)
-
+// Fetch and display a random quote
 async function randomQouteGenerator() {
-
     let response = await fetch('https://qapi.vercel.app/api/random');
     let data = await response.json();
 
     randomQoute.textContent = data.quote;
-
-    qouteArray = data.quote.split("")
-
+    quoteArray = data.quote.split("");
 }
-user_input.addEventListener('input', check_errors)
 
+// Timer function
 function countdown() {
-    clearInterval(Interval_ID); // Clear any existing timer
-
-    Interval_ID = setInterval(() => {
+    timerElement.textContent = 'Timer: ' + timeLeft;
+    intervalID = setInterval(() => {
         timeLeft--;
-        timer.textContent = 'Timer :' + ' ' + timeLeft;
+        timerElement.textContent = 'Timer: ' + timeLeft;
 
         if (timeLeft <= 0) {
-            clearInterval(Interval_ID);
-            timer.textContent = 'Timer : ' + ' ' + 'Time\'s up!';
+            clearInterval(intervalID);
+            timerElement.textContent = 'Time\'s up!';
+            finishTest();
         }
     }, 1000);
 }
 
-function check_errors() {
-    let user_value = user_input.value
-    let user_arr = user_value.split("")
-    mistakes = 0
-        
-        for (let index = 0; index < user_arr.length; index++) {
-            const user_word = user_arr[index]
-            const qoute_word = qouteArray[index]
-    
-            if (user_word !== qoute_word) {
-                mistakes = mistakes + 1
-            }
+// Event listener for user input
+user_input.addEventListener('input', checkErrors);
+
+// Function to check errors and progress
+function checkErrors() {
+    let userValue = user_input.value;
+    userInputArray = userValue.split("");
+
+    mistakes = 0;
+
+    // Compare user input with the quote
+    for (let index = 0; index < userInputArray.length; index++) {
+        const userChar = userInputArray[index];
+        const quoteChar = quoteArray[index];
+
+        if (userChar !== quoteChar) {
+            mistakes++;
         }
-   
+    }
+
+    // Update mistakes
+    errorsElement.textContent = mistakes;
+
+    // Check if user has finished typing the quote
+    if (userInputArray.length === quoteArray.length) {
+        finishTest();
+    }
 }
 
+// Function to finish the test
+function finishTest() {
+    clearInterval(intervalID);
+    user_input.disabled = true;
+    isTimerRunning = false;
 
+    // Calculate WPM and accuracy
+    let timeSpent = totalTime - timeLeft;
+    let wordsTyped = user_input.value.split(' ').length;
+    let wpm = Math.round((wordsTyped / timeSpent) * 60);
+    let accuracy = Math.round(((quoteArray.length - mistakes) / quoteArray.length) * 100);
 
-
+    wpmElement.textContent = wpm;
+    accuracyElement.textContent = accuracy;
+}

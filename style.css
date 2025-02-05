@@ -1,6 +1,104 @@
-#random-qoute{
-    border: 2px solid black;
-    height: 50px;
-    width: 200px;
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
     text-align: center;
+    width: 90%;
+    max-width: 600px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #ffd700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#timer {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #ffd700;
+}
+
+#text-area {
+    margin-bottom: 1.5rem;
+}
+
+#random-qoute {
+    font-size: 1.2rem;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    color: white;
+    border: 2px solid #ffd700;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#user-input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 2px solid #ffd700;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#user-input:focus {
+    border-color: #00ff00;
+}
+
+#result {
+    margin-top: 1.5rem;
+}
+
+#result p {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    color: #ffd700;
+}
+
+button {
+    background: #ffd700;
+    color: #1e3c72;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin: 0.5rem;
+}
+
+button:hover {
+    background: #ffcc00;
+}
+
+/* Highlighting User Input */
+#user-input.correct {
+    border-color: #00ff00;
+}
+
+#user-input.incorrect {
+    border-color: #ff0000;
 }

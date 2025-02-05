@@ -20,9 +20,9 @@ start_btn.addEventListener('click', startTest);
 restart.addEventListener('click', resetTest);
 
 // Function to start the test
-function startTest() {
+async function startTest() {
     resetTest();
-    randomQouteGenerator();
+     await randomQouteGenerator();
     user_input.disabled = false;    // Enable the input field
     user_input.focus();             // Set focus to the input field
     if (!isTimerRunning) {
@@ -32,7 +32,7 @@ function startTest() {
 }
 
 // Function to reset the test
-function resetTest() {
+ function resetTest() {
     clearInterval(intervalID);
     isTimerRunning = false;
     timeLeft = totalTime;
@@ -54,6 +54,12 @@ async function randomQouteGenerator() {
     randomQoute.textContent = data.quote;
     quoteArray = data.quote.split("");
 }
+
+user_input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+    }
+});
 
 // Timer function
 function countdown() {

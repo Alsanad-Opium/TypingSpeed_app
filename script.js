@@ -99,6 +99,15 @@ function checkErrors() {
     // Update mistakes
     errorsElement.textContent = mistakes;
 
+    // Highlight input field based on correctness
+    if (mistakes > 0) {
+        user_input.classList.add('incorrect');
+        user_input.classList.remove('correct');
+    } else {
+        user_input.classList.add('correct');
+        user_input.classList.remove('incorrect');
+    }
+
     // Check if user has finished typing the quote
     if (userInputArray.length === quoteArray.length) {
         finishTest();

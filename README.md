@@ -46,7 +46,7 @@ We welcome contributions from the community!
 1. **Fork the repository**: Click the "Fork" button on the top right of this repository.
 2. **Clone your forked repository**:
    ```sh
-   git clone https://github.com/your-username/TypingSpeed_app.git
+   git clone https://github.com/Alsanad-Opium/TypingSpeed_app.git
    ```
 3. **Create a new branch**:
    ```sh
